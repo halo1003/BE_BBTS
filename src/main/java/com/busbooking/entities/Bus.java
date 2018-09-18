@@ -26,7 +26,7 @@ public class Bus {
 	private int id;
 
 	@Column(name = "busnumber")
-	private String busNumber;
+	private int busNumber;
 
 	@Column(name = "totalseat")
 	private int totalSeat = 45;
@@ -50,16 +50,16 @@ public class Bus {
 		this.tour = tour;
 	}
 
-	public Bus(String busNumber, Tour tour) {
+	public Bus(int busNumber, Tour tour) {
 		this.busNumber = busNumber;
 		this.tour = tour;
 	}
 
-	public String getBusNumber() {
+	public int getBusNumber() {
 		return busNumber;
 	}
 
-	public void setBusNumber(String busNumber) {
+	public void setBusNumber(int busNumber) {
 		this.busNumber = busNumber;
 	}
 

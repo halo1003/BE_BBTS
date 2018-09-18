@@ -66,42 +66,122 @@ public class TourController {
 
 	/* ---------------- GET TOUR BY STARTPLACE ------------------------ */
 	@GetMapping(value = "/startplace")
-	public ResponseEntity<List<Tour>> findByStartPlaceContaining(
-			@RequestParam(value = "s", required = false) String startPlace) {
-		List<Tour> tour = tourService.findByStartPlaceContaining(startPlace);
-		if (tour != null) {
-			return new ResponseEntity<List<Tour>>(tour, HttpStatus.OK);
-		}
-		return new ResponseEntity<List<Tour>>(HttpStatus.NOT_FOUND);
-	}
-
-	@GetMapping(value = "/getallstartplace")
-	public ResponseEntity<List<Tour>> findAllStartPlace() {
-		List<Tour> tour = tourService.findAllStartPlace();
-		return new ResponseEntity<List<Tour>>(tour, HttpStatus.OK);
-	}
-
-	/* ---------------- GET ENDPLACE BY STARTPLACE ------------------------ */
-	@GetMapping(value = "/endplace")
-	public ResponseEntity<List<Tour>> findEndPlaceByStartPlace(
-			@RequestParam(value = "s", required = false) String startPlace) {
-		List<Tour> tour = tourService.findEndPlaceByStartPlace(startPlace);
-		if (tour != null) {
-			return new ResponseEntity<List<Tour>>(tour, HttpStatus.OK);
-		}
-		return new ResponseEntity<List<Tour>>(HttpStatus.NOT_FOUND);
-	}
-
-	/* ---------------- GET STARTTIME BY STARTPLACE ------------------------ */
-	@GetMapping(value = "/starttime")
-	public ResponseEntity<List<Tour>> findStartTimeByStartPlace(
+	public ResponseEntity<Object> findByStartPlaceContaining(
 			@RequestParam(value = "s", required = false) String startPlace,
-			@RequestParam(value = "e", required = false) String endPlace) {
-		List<Tour> tour = tourService.findStartTimeByStartPlace(startPlace, endPlace);
-		if (tour != null) {
-			return new ResponseEntity<List<Tour>>(tour, HttpStatus.OK);
+			@RequestParam(name = "page", required = false, defaultValue = "0") Integer page,
+			@RequestParam(name = "size", required = false, defaultValue = "5") Integer size,
+			@RequestParam(name = "sort", required = false, defaultValue = "ASC") String sort) {
+		Sort sortable = null;
+		if (sort.equals("ASC")) {
+			sortable = Sort.by("id").ascending();
 		}
-		return new ResponseEntity<List<Tour>>(HttpStatus.NOT_FOUND);
+		if (sort.equals("DESC")) {
+			sortable = Sort.by("id").descending();
+		}
+		Pageable pageable = PageRequest.of(page, size, sortable);
+		return new ResponseEntity<Object>(tourService.findByStartPlaceContaining(startPlace, pageable), HttpStatus.OK);
+	}
+
+	/* ---------------- GET TOUR BY ENDPLACE ------------------------ */
+	@GetMapping(value = "/endplace")
+	public ResponseEntity<Object> findTourByEndPlaceContaining(
+			@RequestParam(value = "e", required = false) String endPlace,
+			@RequestParam(name = "page", required = false, defaultValue = "0") Integer page,
+			@RequestParam(name = "size", required = false, defaultValue = "5") Integer size,
+			@RequestParam(name = "sort", required = false, defaultValue = "ASC") String sort) {
+		Sort sortable = null;
+		if (sort.equals("ASC")) {
+			sortable = Sort.by("id").ascending();
+		}
+		if (sort.equals("DESC")) {
+			sortable = Sort.by("id").descending();
+		}
+		Pageable pageable = PageRequest.of(page, size, sortable);
+		return new ResponseEntity<Object>(tourService.findTourByEndPlaceContaining(endPlace, pageable), HttpStatus.OK);
+	}
+
+	/* ---------------- GET TOUR BY STARTTIME ------------------------ */
+	@GetMapping(value = "/starttime")
+	public ResponseEntity<Object> findTourByStarttime(
+			@RequestParam("s") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime startTime,
+			@RequestParam(name = "page", required = false, defaultValue = "0") Integer page,
+			@RequestParam(name = "size", required = false, defaultValue = "5") Integer size,
+			@RequestParam(name = "sort", required = false, defaultValue = "ASC") String sort) {
+		Sort sortable = null;
+		if (sort.equals("ASC")) {
+			sortable = Sort.by("startTime").ascending();
+		}
+		if (sort.equals("DESC")) {
+			sortable = Sort.by("startTime").descending();
+		}
+		Pageable pageable = PageRequest.of(page, size, sortable);
+		return new ResponseEntity<Object>(tourService.findTourByStarttime(startTime, pageable), HttpStatus.OK);
+	}
+
+	/*
+	 * ---------------- GET TOUR BY StartPlaceAndEndplace ------------------------
+	 */
+	@GetMapping(value = "/spandep")
+	public ResponseEntity<Object> findTourByStartPlaceAndEndplace(
+			@RequestParam(value = "s", required = false) String startPlace,
+			@RequestParam(value = "e", required = false) String endPlace,
+			@RequestParam(name = "page", required = false, defaultValue = "0") Integer page,
+			@RequestParam(name = "size", required = false, defaultValue = "5") Integer size,
+			@RequestParam(name = "sort", required = false, defaultValue = "ASC") String sort) {
+		Sort sortable = null;
+		if (sort.equals("ASC")) {
+			sortable = Sort.by("id").ascending();
+		}
+		if (sort.equals("DESC")) {
+			sortable = Sort.by("id").descending();
+		}
+		Pageable pageable = PageRequest.of(page, size, sortable);
+		return new ResponseEntity<Object>(tourService.findTourByStartPlaceAndEndplace(startPlace, endPlace, pageable),
+				HttpStatus.OK);
+	}
+
+	/*
+	 * ---------------- GET TOUR BY StartPlaceAndEndplace ------------------------
+	 */
+	@GetMapping(value = "/spandst")
+	public ResponseEntity<Object> findTourByStartPlaceAndStartTime(
+			@RequestParam(value = "s", required = false) String startPlace,
+			@RequestParam("t") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime startTime,
+			@RequestParam(name = "page", required = false, defaultValue = "0") Integer page,
+			@RequestParam(name = "size", required = false, defaultValue = "5") Integer size,
+			@RequestParam(name = "sort", required = false, defaultValue = "ASC") String sort) {
+		Sort sortable = null;
+		if (sort.equals("ASC")) {
+			sortable = Sort.by("id").ascending();
+		}
+		if (sort.equals("DESC")) {
+			sortable = Sort.by("id").descending();
+		}
+		Pageable pageable = PageRequest.of(page, size, sortable);
+		return new ResponseEntity<Object>(tourService.findTourByStartPlaceAndStartTime(startPlace, startTime, pageable),
+				HttpStatus.OK);
+	}
+
+	/*
+	 * ---------------- GET TOUR BY StartPlaceAndEndplace ------------------------
+	 */
+	@GetMapping(value = "/epandst")
+	public ResponseEntity<Object> findTourByEndPlaceAndStartTime(
+			@RequestParam(value = "s", required = false) String endPlace,
+			@RequestParam("s") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime startTime,
+			@RequestParam(name = "page", required = false, defaultValue = "0") Integer page,
+			@RequestParam(name = "size", required = false, defaultValue = "5") Integer size,
+			@RequestParam(name = "sort", required = false, defaultValue = "ASC") String sort) {
+		Sort sortable = null;
+		if (sort.equals("ASC")) {
+			sortable = Sort.by("id").ascending();
+		}
+		if (sort.equals("DESC")) {
+			sortable = Sort.by("id").descending();
+		}
+		Pageable pageable = PageRequest.of(page, size, sortable);
+		return new ResponseEntity<Object>(tourService.findTourByEndPlaceAndStartTime(endPlace, startTime, pageable),
+				HttpStatus.OK);
 	}
 
 	/* ---------------- GET TRIP BY PARAM ------------------------ */
@@ -111,22 +191,20 @@ public class TourController {
 			@RequestParam("t") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime startTime,
 			@RequestParam(name = "page", required = false, defaultValue = "0") Integer page,
 			@RequestParam(name = "size", required = false, defaultValue = "5") Integer size,
-			@RequestParam(name = "sort", required = false, defaultValue = "asc") String sort,
-			@RequestParam(name = "e", required = false, defaultValue = "name") String element) {
-
+			@RequestParam(name = "sort", required = false, defaultValue = "ASC") String sort) {
 		Sort sortable = null;
 		if (sort.equals("ASC")) {
-			sortable = Sort.by(element).ascending();
+			sortable = Sort.by("startPlace").ascending();
 		}
 		if (sort.equals("DESC")) {
-			sortable = Sort.by(element).descending();
+			sortable = Sort.by("startPlace").descending();
 		}
 		Pageable pageable = PageRequest.of(page, size, sortable);
 		return new ResponseEntity<Object>(tourService.findTourByParam(startPlace, endPlace, startTime, pageable),
 				HttpStatus.OK);
 	}
 
-	/* ---------------- CREATE USER TOUR------------------------ */
+	/* ---------------- CREATE TOUR------------------------ */
 	@PostMapping(value = "/create")
 	public Tour createTour(@RequestBody Tour tour, BindingResult bindingResult) {
 

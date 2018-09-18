@@ -3,7 +3,6 @@ package com.busbooking.controller;
 import java.util.List;
 import java.util.Optional;
 
-import org.jboss.logging.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -70,22 +69,11 @@ public class TicketController {
 		return ticket;
 	}
 
-	/*------------------- findTicketByUserId -------------------------*/
+	/* ---------------- GET TICKET BY USER ID------------------------ */
 	@GetMapping(value = "/user")
 	public List<Ticket> findTicketByUserId(@RequestParam(value = "id", required = false) int userId) {
 		List<Ticket> ticket = ticketService.findTicketByUserId(userId);
 		return ticket;
-	}
-
-	/*------------------- FIND BOOKED SEATS -------------------------*/
-	@GetMapping(value = "/{idTour}/{idBus}")
-	public ResponseEntity<Object> findBookedSeat(@PathVariable("idTour") int idTour, @PathVariable("idBus") int idBus) {
-		List<Ticket> ticket = ticketService.findBookedSeat(idTour, idBus);
-		if (ticket != null) {
-			return new ResponseEntity<Object>(ticket, HttpStatus.CREATED);
-		} else {
-			return new ResponseEntity<Object>(HttpStatus.BAD_REQUEST);
-		}
 	}
 
 	/* ---------------- PAGEABLE TICKET BY TIME ------------------------ */
@@ -105,6 +93,23 @@ public class TicketController {
 		Pageable pageable = PageRequest.of(page, size, sortable);
 		return new ResponseEntity<Object>(ticketRepository.findTicket(pageable), HttpStatus.OK);
 	}
+	/* ---------------- PAGEABLE TICKET BY STARTPLACE ------------------------ */
+	@RequestMapping(value = "/startplace", method = RequestMethod.GET)
+	public ResponseEntity<Object> findStartplaceByTicket(
+			@RequestParam(name = "page", required = false, defaultValue = "0") Integer page,
+			@RequestParam(name = "size", required = false, defaultValue = "5") Integer size,
+			@RequestParam(name = "sort", required = false, defaultValue = "DESC") String sort,
+			@RequestParam(name = "s") String startPlace) {
+		Sort sortable = null;
+		if (sort.equals("ASC")) {
+			sortable = Sort.by("timecreate").ascending();
+		}
+		if (sort.equals("DESC")) {
+			sortable = Sort.by("timecreate").descending();
+		}
+		Pageable pageable = PageRequest.of(page, size, sortable);
+		return new ResponseEntity<Object>(ticketRepository.findStartplaceByTicket(startPlace, pageable), HttpStatus.OK);
+	}
 
 	/* ---------------- CREATE TICKET ------------------------ */
 	@RequestMapping(value = "/create", method = RequestMethod.POST)
@@ -118,6 +123,7 @@ public class TicketController {
 		}
 	}
 
+	/* ---------------- BOOKING TICKET ------------------------ */
 	@RequestMapping(value = "/booking", method = RequestMethod.POST)
 	public ResponseEntity<Object> bookingTicket(@RequestParam(value = "t", required = false) int idTour,
 			@RequestParam(value = "b", required = false) int idBus,
@@ -130,10 +136,10 @@ public class TicketController {
 			if (!findEmptySeatForTicket.contains(_seat)) {
 				return new ResponseEntity<>("Book faild by Seat.", HttpStatus.NOT_FOUND);
 			} else {
-				User user = userService.loadUserByToken(token);
+				User _user = userService.loadUserByToken(token);
 				return new ResponseEntity<Object>(
 						ticketRepository.save(
-								new Ticket(	tourService.findOne(idTour), busService.findById(idBus), user, _seat)),
+								new Ticket(tourService.findOne(idTour), busService.findById(idBus), _user, _seat)),
 						HttpStatus.OK);
 			}
 		}
@@ -146,9 +152,7 @@ public class TicketController {
 		Optional<Ticket> ticketData = ticketService.findOne(id);
 		if (ticketData.isPresent()) {
 			Ticket _ticket = ticketData.get();
-			System.out.println(_ticket);
 			_ticket.setTimecreate(ticket.getTimecreate());
-			_ticket.setSeat(ticket.getSeat());
 			_ticket.setActive(ticket.isActive());
 			_ticket.setBus(ticket.getBus());
 			_ticket.setTour(ticket.getTour());

@@ -13,19 +13,10 @@ import com.busbooking.entities.Bus;
 public interface BusRepository extends JpaRepository<Bus, Integer> {
 
 	List<Bus> findAllByOrderByIdDesc();
-	/* ---------------- FIND ALL DISTINCT BUS ------------------------ */
-	@Query("SELECT DISTINCT b.busNumber FROM Bus b")
-	List<Bus> findAllDistinctBus();
 	
-	@Query("SELECT b FROM Bus b WHERE b.id = :idBus")
-	Bus findbyId(int idBus);
-	
-	/* ---------------- FIND TOUR IN BUS ------------------------ */
-	@Query(value = "SELECT * FROM bus b WHERE b.busNumber = :bus_number", nativeQuery = true)
-	List<Bus> findTourByBusnumber(@Param("bus_number") String idTour);
+	Bus findById(int idBus);
 
 	/* ---------------- FIND BUS IN TOUR ------------------------ */
 	@Query(value = "SELECT * FROM bus b WHERE b.tour_idtour = :idTour", nativeQuery = true)
 	List<Bus> findBusByIdTour(@Param("idTour") long idTour);
-	
 }

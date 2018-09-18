@@ -24,7 +24,7 @@ public class UserValidator implements Validator {
 		User user = (User) o;
 
 		ValidationUtils.rejectIfEmptyOrWhitespace(errors, "username", "NotEmpty");
-		if (user.getUsername().length() < 4 || user.getUsername().length() > 255) {
+		if (user.getUsername().length() < 6 || user.getUsername().length() > 15) {
 			errors.rejectValue("username", "Size.userForm.username");
 			System.out.println("error: Size username bad request");
 		}
@@ -34,7 +34,7 @@ public class UserValidator implements Validator {
 		}
 
 		ValidationUtils.rejectIfEmptyOrWhitespace(errors, "password", "NotEmpty");
-		if (user.getPassword().length() < 8 || user.getPassword().length() > 255) {
+		if (user.getPassword().length() < 8 || user.getPassword().length() > 15) {
 			errors.rejectValue("password", "Size.userForm.password");
 			System.out.println("error: Size password bad request");
 		}

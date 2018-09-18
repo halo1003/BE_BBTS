@@ -22,7 +22,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.busbooking.entities.Role;
 import com.busbooking.entities.User;
+import com.busbooking.repo.RoleRepository;
 import com.busbooking.repo.UserRepository;
 import com.busbooking.service.JwtService;
 import com.busbooking.service.UserService;
@@ -43,24 +45,7 @@ public class UserController {
 	private UserValidator userValidator;
 
 	@Autowired
-	private UserRepository userRepository;
-
-	@Autowired
 	private BCryptPasswordEncoder bCryptPasswordEncoder;
-
-//	@RequestMapping(method = RequestMethod.GET, value = "/users")
-//    @ResponseBody
-//    public List<User> search(@RequestParam(value = "search") String search) {
-//        UserSpecificationsBuilder builder = new UserSpecificationsBuilder();
-//        Pattern pattern = Pattern.compile("(\\w+?)(:|<|>)(\\w+?),");
-//        Matcher matcher = pattern.matcher(search + ",");
-//        while (matcher.find()) {
-//            builder.with(matcher.group(1), matcher.group(2), matcher.group(3));
-//        }
-//         
-//        Specification<User> spec = builder.build();
-//        return userRepository.findAll(spec);
-//    }
 
 	/* ---------------- GET ALL USER ------------------------ */
 	@RequestMapping(value = "/all", method = RequestMethod.GET)
@@ -112,7 +97,7 @@ public class UserController {
 	public ResponseEntity<String> createUser(@RequestBody User user, BindingResult bindingResult) {
 		userValidator.validate(user, bindingResult);
 		if (bindingResult.hasErrors()) {
-			return new ResponseEntity<String>("Somethings are wrong. Please try again !", HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<String>("Not validate!", HttpStatus.BAD_REQUEST);
 		}
 		user.setRoles(new HashSet<>(userService.findByIdRole(1)));
 		user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
@@ -123,35 +108,16 @@ public class UserController {
 		}
 	}
 
-	/* ---------------- UPDATE USER BY ADMIN------------------------ */
-	@RequestMapping(value = "/{id}/updatebyadmin", method = RequestMethod.PUT)
-	public ResponseEntity<String> updateUserbyAdmin(@PathVariable("id") int id, @RequestBody User user) {
+	/* ---------------- UPDATE USER ------------------------ */
+	@RequestMapping(value = "/{id}/update", method = RequestMethod.PUT)
+	public ResponseEntity<String> updateUser(@PathVariable("id") int id, @RequestBody User user) {
 		Optional<User> userData = userService.findById(id);
 		if (userData.isPresent()) {
 			User _user = userData.get();
 			_user.setName(user.getName());
-			_user.setPassword(user.getPassword());
+			_user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
 			_user.setAge(user.getAge());
-//			_user.setActive(user.isActive());
-			_user.setEmail(user.getEmail());
-			_user.setPhone(user.getPhone());
-			userService.add(_user);
-			return new ResponseEntity<>("Updated!", HttpStatus.OK);
-		} else {
-			return new ResponseEntity<>("Update faild", HttpStatus.NOT_FOUND);
-		}
-	}
-
-	/* ---------------- UPDATE USER BY CUSTOMER------------------------ */
-	@RequestMapping(value = "/{id}/updatebycustomer", method = RequestMethod.PUT)
-	public ResponseEntity<String> updateUserbyCustomer(@PathVariable("id") int id, @RequestBody User user) {
-		Optional<User> userData = userService.findById(id);
-		if (userData.isPresent()) {
-			User _user = userData.get();
-			_user.setName(user.getName());
-//			_user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
-			_user.setAge(user.getAge());
-//			_user.setActive(user.isActive());
+			_user.setActive(user.isActive());
 			_user.setEmail(user.getEmail());
 			_user.setPhone(user.getPhone());
 			userService.add(_user);

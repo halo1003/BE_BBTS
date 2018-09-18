@@ -75,6 +75,12 @@ public class UserServiceImpl implements UserService {
 	}
 
 	/* ---------------- LOAD USER BY TOKEN ------------------------ */
+//	@Override
+//	public User loadUserByToken(String token) {
+//		String _token = jwtService.getUsernameFromToken(token);
+//		return userRepository.findByUsernameByToken(_token);
+//	}
+	
 	@Override
 	public User loadUserByToken(String token) {
 		String _token = jwtService.getUsernameFromToken(token);
@@ -100,5 +106,7 @@ public class UserServiceImpl implements UserService {
 	public List<Role> findByIdRole(int id) {
 		return roleRepository.findById(id);
 	}
+
+	
 
 }

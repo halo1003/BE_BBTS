@@ -20,7 +20,7 @@ public class SeatService {
 	public void save(Bus bus) {
 		int i;
 		for (i = 1; i <= 45; i++) {
-			seatRepository.save(new Seat(i, false, bus));
+			seatRepository.save(new Seat(i+"", false, bus));
 		}
 	}
 
@@ -33,15 +33,15 @@ public class SeatService {
 	public Seat findByIdByIdBus(int idBus, int numberSeat) {
 		return seatRepository.findByIdByIdBus(idBus, numberSeat);
 	}
-
+	
 	/* ---------------- FIND SEAT DEPEND TICKET ------------------------ */
-	public Optional<Seat> findSeatForTicket(int idTour, int idBus, int numberSeat) {
+	public Optional<Seat> findSeatForTicket(int idTour, int idBus, String numberSeat) {
 		return seatRepository.findSeatForTicket(idTour, idBus, numberSeat);
 	}
-
-	/* ---------------- FIND LIST SEAT DEPEND TICKET ------------------------ */
-	public List<Seat> findSeatsForTicket(int idTour, int idBus) {
-		return seatRepository.findSeatsForTicket(idTour, idBus);
+	
+	/* ---------------- FIND SEAT DEPEND TICKET ------------------------ */
+	public Seat findSeatInTicket(int idTour, int idBus, String numberSeat) {
+		return seatRepository.findSeatInTicket(idTour, idBus, numberSeat);
 	}
 
 	/* ---------------- SET ACIVE SEAT ------------------------ */
@@ -59,7 +59,4 @@ public class SeatService {
 		return seatRepository.findBookedSeatForTicket(idTour, idBus);
 	}
 
-	public Seat findSeatInTicket(int idTour, int idBus, String numberSeat) {
-		return seatRepository.findSeatInTicket(idTour, idBus, numberSeat);
-	}
 }

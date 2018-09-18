@@ -73,7 +73,6 @@ public class Ticket {
 		return this.active = false;
 	}
 
-	
 	public LocalDateTime getTimecreate() {
 		return timecreate;
 	}

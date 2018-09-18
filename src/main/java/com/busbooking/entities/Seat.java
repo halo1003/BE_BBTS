@@ -24,7 +24,7 @@ public class Seat {
 	private int idSeat;
 
 	@Column(name = "numberseat")
-	private int numberSeat;
+	private String numberSeat;
 
 	@Column(name = "active")
 	private boolean active;
@@ -37,7 +37,7 @@ public class Seat {
 	@JoinColumn(name = "bus_idbus")
 	private Bus bus;
 
-	public Seat(int numberSeat, boolean active, Bus bus) {
+	public Seat(String numberSeat, boolean active, Bus bus) {
 		this.numberSeat = numberSeat;
 		this.active = active;
 		this.bus = bus;
@@ -46,11 +46,11 @@ public class Seat {
 	public Seat() {
 	}
 
-	public int getNumberSeat() {
+	public String getNumberSeat() {
 		return numberSeat;
 	}
 
-	public void setNumberSeat(int numberSeat) {
+	public void setNumberSeat(String numberSeat) {
 		this.numberSeat = numberSeat;
 	}
 

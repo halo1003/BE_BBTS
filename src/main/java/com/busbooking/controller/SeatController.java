@@ -44,23 +44,25 @@ public class SeatController {
 		}
 		return new ResponseEntity<Object>("Not Found Seat", HttpStatus.NOT_FOUND);
 	}
-
+	
 	@GetMapping(value = "/empty")
-	public ResponseEntity<List<Seat>> findEmptySeatForTicket(@RequestParam("idT") int idTour,
-			@RequestParam("idB") int idBus) {
+	public ResponseEntity<List<Seat>> findEmptySeatForTicket(
+			@RequestParam("idT") int idTour,
+			@RequestParam("idB") int idBus){
 		List<Seat> _seat = seatService.findEmptySeatForTicket(idTour, idBus);
-		if (_seat.isEmpty()) {
+		if(_seat.isEmpty()) {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		} else {
 			return new ResponseEntity<List<Seat>>(_seat, HttpStatus.OK);
 		}
 	}
-
+	
 	@GetMapping(value = "/booked")
-	public ResponseEntity<List<Seat>> findBookedSeatForTicket(@RequestParam("idT") int idTour,
-			@RequestParam("idB") int idBus) {
-		List<Seat> _seat = seatService.findBookedSeatForTicket(idTour, idBus);
-		if (_seat.isEmpty()) {
+	public ResponseEntity<List<Seat>> findBookedSeatForTicket(
+			@RequestParam("idT") int idTour,
+			@RequestParam("idB") int idBus){
+		List<Seat> _seat = seatService.findEmptySeatForTicket(idTour, idBus);
+		if(_seat.isEmpty()) {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		} else {
 			return new ResponseEntity<List<Seat>>(_seat, HttpStatus.OK);

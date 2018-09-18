@@ -11,12 +11,7 @@ public interface BusService {
 	public List<Bus> findAll();
 	
 	public List<Bus> findBusByIdTour(int idTour);
-
-	public List<Bus> findTourByBusnumber(String bus_number);
-
-	public List<Bus> findAllDistinctBus();
-
-	public Bus findById(int idBus);
-
+	
+	public Bus findById(int id);
 
 }

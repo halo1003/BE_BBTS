@@ -1,7 +1,6 @@
 package com.busbooking.service;
 
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,35 +23,10 @@ public class TourServiceImpl implements TourService {
 		return tourRepository.findAllByOrderByIdDesc(bageable);
 	}
 	
-	/* ---------------- FIND ALL STARTPLACE ------------------------ */
+	/* ---------------- FIND TOUR BY ID WITHOUT OPTIONAL ------------------------ */
 	@Override
-	public List<Tour> findAllStartPlace(){
-		return tourRepository.findAllStartPlace();
-	}
-	
-	/* ---------------- FIND TOUR BY STARTPLACE CONTAINING ------------------------ */
-	@Override
-	public
-	List<Tour> findByStartPlaceContaining(String startPlace){
-		return tourRepository.findByStartPlaceContaining(startPlace);
-	}
-
-	/* ---------------- FIND TOUR BY START PLACE ------------------------ */
-	@Override
-	public List<Tour> findTourByStartPlace(String startPlace) {
-		return tourRepository.findTourByStartPlace(startPlace);
-	}
-
-	/* ---------------- FIND ENDPLACE BY STARTPLACE ------------------------ */
-	@Override
-	public List<Tour> findEndPlaceByStartPlace(String startPlace) {
-		return tourRepository.findEndPlaceByStartPlace(startPlace);
-	}
-
-	/* ---------------- FIND STARTTIME BY STARTPLACE ------------------------ */
-	@Override
-	public List<Tour> findStartTimeByStartPlace(String startPlace, String endPlace) {
-		return tourRepository.findStartTimeByStartPlace(startPlace, endPlace);
+	public Tour findOne(int idTour) {
+		return tourRepository.findOne(idTour);
 	}
 	
 	/* ---------------- FIND TOUR BY PARAM ------------------------ */
@@ -60,7 +34,7 @@ public class TourServiceImpl implements TourService {
 	public Page<Tour> findTourByParam(String startPlace, String endPlace, LocalDateTime startTime, Pageable pageable){
 		return tourRepository.findTourByParam(startPlace, endPlace, startTime, pageable);
 	}
-
+	
 	/* ---------------- CREATE TOUR ------------------------ */
 	@Override
 	public Tour save(Tour seat) {
@@ -86,8 +60,41 @@ public class TourServiceImpl implements TourService {
 	}
 
 	@Override
-	public Tour findOne(int idTour) {
-		return tourRepository.findOne(idTour);
+	public Page<Tour> findByStartPlaceContaining(String startPlace, Pageable pageable) {
+		// TODO Auto-generated method stub
+		return tourRepository.findTourByStartPlaceContaining(startPlace, pageable);
 	}
+
+	@Override
+	public Page<Tour> findTourByEndPlaceContaining(String endPlace, Pageable pageable) {
+		// TODO Auto-generated method stub
+		return tourRepository.findTourByEndPlaceContaining(endPlace, pageable);
+	}
+
+	@Override
+	public Page<Tour> findTourByStarttime(LocalDateTime startTime, Pageable pageable) {
+		// TODO Auto-generated method stub
+		return tourRepository.findTourByStarttime(startTime, pageable);
+	}
+
+	@Override
+	public Page<Tour> findTourByStartPlaceAndEndplace(String startPlace, String endPlace, Pageable pageable) {
+		// TODO Auto-generated method stub
+		return tourRepository.findTourByStartPlaceAndEndplace(startPlace, endPlace, pageable);
+	}
+
+	@Override
+	public Page<Tour> findTourByStartPlaceAndStartTime(String startPlace, LocalDateTime startTime, Pageable pageable) {
+		// TODO Auto-generated method stub
+		return tourRepository.findTourByStartPlaceAndStartTime(startPlace, startTime, pageable);
+	}
+
+	@Override
+	public Page<Tour> findTourByEndPlaceAndStartTime(String endPlace, LocalDateTime startTime, Pageable pageable) {
+		// TODO Auto-generated method stub
+		return tourRepository.findTourByEndPlaceAndStartTime(endPlace, startTime, pageable);
+	}
+
+	
 
 }

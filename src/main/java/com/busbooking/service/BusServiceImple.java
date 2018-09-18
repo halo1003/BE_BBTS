@@ -31,26 +31,15 @@ public class BusServiceImple implements BusService {
 		return busRepository.findAllByOrderByIdDesc();
 	}
 
-	/* ---------------- FIND ALL DISTINCT BUS ------------------------ */
-	@Override
-	public List<Bus> findAllDistinctBus() {
-		return busRepository.findAllDistinctBus();
-	}
-
-	/* ---------------- FIND TOUR BY BUS ------------------------ */
-	@Override
-	public List<Bus> findTourByBusnumber(String bus_number) {
-		return busRepository.findTourByBusnumber(bus_number);
-	}
-
 	/* ---------------- FIND BUS BY ID TOUR ------------------------ */
 	@Override
 	public List<Bus> findBusByIdTour(int idTour) {
 		return busRepository.findBusByIdTour(idTour);
 	}
 
+	/* ---------------- FIND BUS BY ID ------------------------ */
 	@Override
 	public Bus findById(int idBus) {
-		return busRepository.findbyId(idBus);
+		return busRepository.findById(idBus);
 	}
 }

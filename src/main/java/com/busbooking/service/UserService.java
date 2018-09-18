@@ -28,8 +28,6 @@ public interface UserService {
 	public User loadUserByUsername(String username);
 	
 	public User loadUserByToken(String token);
-	
-	
 
 	public boolean checkLogin(User user);
 

@@ -15,6 +15,10 @@ public interface TicketService {
 	public List<Ticket> getAllTicket();
 	
 	public Page<Ticket> findTicket(Pageable pageable);
+	
+	public List<Ticket> findTicketByUserId(int userId);
+	
+//	public Optional<Ticket> findSeatForTicket(int idTour, int idBus, String numberSeat);
 
 	public Optional<Ticket> findOne(int id);
 
@@ -24,7 +28,5 @@ public interface TicketService {
 
 	public void deleteTicket(int id);
 
-	public List<Ticket> findTicketByUserId(int userId);
-
-	public List<Ticket> findBookedSeat(int idTour, int idBus);
+	public Page<Ticket> findStartplaceByTicket(String startPlace, Pageable pageable);
 }

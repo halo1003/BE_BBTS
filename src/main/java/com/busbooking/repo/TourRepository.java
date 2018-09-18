@@ -15,27 +15,34 @@ import com.busbooking.entities.Tour;
 @Repository
 public interface TourRepository extends JpaRepository<Tour, Integer> {
 
-	Page<Tour> findAllByOrderByIdDesc(Pageable bageable);
-	
+	Page<Tour> findAllByOrderByIdDesc(Pageable pageable);
+
 	@Query("SELECT t FROM Tour t WHERE t.id = :idTour")
 	Tour findOne(@Param("idTour") int idTour);
-	
-	@Query("SELECT t FROM Tour t WHERE t.startPlace like %:startPlace%")
-	List<Tour> findByStartPlaceContaining(String startPlace);
 
-	@Query("SELECT t FROM Tour t WHERE t.startPlace = :startPlace")
-	List<Tour> findTourByStartPlace(@Param("startPlace") String startPlace);
-	
-	@Query("SELECT t.endPlace FROM Tour t WHERE t.startPlace = :startPlace")
-	List<Tour> findEndPlaceByStartPlace(@Param("startPlace") String startPlace);
-	
-	@Query("SELECT t.startTime FROM Tour t WHERE t.startPlace = :startPlace AND t.endPlace = :endPlace")
-	List<Tour> findStartTimeByStartPlace(@Param("startPlace") String startPlace, @Param("endPlace") String endPlace);
-	
-	@Query("SELECT DISTINCT t.startPlace FROM Tour t")
-	List<Tour> findAllStartPlace();
-	
-	@Query("SELECT t FROM Tour t WHERE t.startPlace = :startPlace AND t.startTime > :startTime AND t.endPlace = :endPlace ")
-	Page<Tour> findTourByParam(@Param("startPlace") String startPlace, @Param("endPlace") String endPlace, @Param("startTime") LocalDateTime startTime, Pageable pageable);
-	
+	@Query("SELECT t FROM Tour t WHERE t.startPlace like %:startPlace%")
+	Page<Tour> findTourByStartPlaceContaining(String startPlace, Pageable pageable);
+
+	@Query("SELECT t FROM Tour t WHERE t.endPlace like %:endPlace%")
+	Page<Tour> findTourByEndPlaceContaining(String endPlace, Pageable pageable);
+
+	@Query("SELECT t FROM Tour t WHERE t.startTime = :startTime")
+	Page<Tour> findTourByStarttime(@Param("startTime") LocalDateTime startTime, Pageable pageable);
+
+	@Query("SELECT t FROM Tour t WHERE t.startPlace like %:startPlace% AND t.endPlace like %:endPlace%")
+	Page<Tour> findTourByStartPlaceAndEndplace(@Param("startPlace") String startPlace,
+			@Param("endPlace") String endPlace, Pageable pageable);
+
+	@Query("SELECT t FROM Tour t WHERE t.startPlace like %:startPlace% AND t.startTime <= :startTime ")
+	Page<Tour> findTourByStartPlaceAndStartTime(@Param("startPlace") String startPlace,
+			@Param("startTime") LocalDateTime startTime, Pageable pageable);
+
+	@Query("SELECT t FROM Tour t WHERE t.endPlace like %:endPlace% AND t.startTime <= :startTime ")
+	Page<Tour> findTourByEndPlaceAndStartTime(@Param("endPlace") String endPlace,
+			@Param("startTime") LocalDateTime startTime, Pageable pageable);
+
+	@Query("SELECT t FROM Tour t WHERE t.startPlace like %:startPlace% OR t.endPlace = :endPlace OR t.startTime < :startTime ")
+	Page<Tour> findTourByParam(@Param("startPlace") String startPlace, @Param("endPlace") String endPlace,
+			@Param("startTime") LocalDateTime startTime, Pageable pageable);
+
 }

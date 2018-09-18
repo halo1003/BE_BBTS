@@ -26,32 +26,50 @@ public interface SeatRepository extends JpaRepository<Seat, Integer> {
 	List<Seat> bookingSeat(@Param("active") boolean active, @Param("numberSeat") int numberSeat);
 
 	/* ---------------- FIND TOUR, BUS, SEAT ------------------------ */
-	@Query(value = "SELECT s.*, b.*, t.* FROM seat s INNER JOIN bus b ON s.bus_idbus = b.idbus INNER JOIN tour t ON b.tour_idtour = t.idtour WHERE t.idtour = :idTour AND b.idbus = :idBus AND s.numberseat = :numberSeat", nativeQuery = true)
+	@Query(value = "SELECT s.idseat FROM seat s INNER JOIN bus b ON s.bus_idbus = b.idbus INNER JOIN tour t ON b.tour_idtour = t.idtour WHERE t.idtour = :idTour AND b.idbus = :idBus AND s.numberseat = :numberSeat", nativeQuery = true)
 	Optional<Seat> findSeatForTicket(@Param("idTour") int idTour, @Param("idBus") int idBus,
-			@Param("numberSeat") int numberSeat);
-
+			@Param("numberSeat") String numberSeat);
+	
 	/* ---------------- FIND TOUR, BUS, SEAT ------------------------ */
 	@Query(value = "SELECT s.* FROM seat s INNER JOIN bus b ON s.bus_idbus = b.idbus INNER JOIN tour t ON b.tour_idtour = t.idtour WHERE t.idtour = :idTour AND b.idbus = :idBus AND s.numberseat = :numberSeat", nativeQuery = true)
 	Seat findSeatInTicket(@Param("idTour") int idTour, @Param("idBus") int idBus,
 			@Param("numberSeat") String numberSeat);
 	
-	/* ---------------- FIND TOUR, BUS, SEATS ------------------------ */
-	@Query(value = "SELECT s.* FROM seat s INNER JOIN bus b ON s.bus_idbus = b.idbus INNER JOIN tour t ON b.tour_idtour = t.idtour WHERE t.idtour = :idTour AND b.idbus = :idBus", nativeQuery = true)
-	List<Seat> findSeatsForTicket(@Param("idTour") int idTour, @Param("idBus") int idBus);
-
+	
 	/* ---------------- FIND SEAT EMPTY ------------------------ */
-	@Query(value = "SELECT s.*, b.*, t.* " + "FROM seat s " + "INNER JOIN bus b " + "ON s.bus_idbus = b.idbus "
-			+ "INNER JOIN tour t " + "ON b.tour_idtour = t.idtour " + "WHERE t.idtour = :idTour "
-			+ "AND b.idbus = :idBus " + "AND s.idseat NOT IN " + "		(" + "        select  tk.seat_idseat "
-			+ "        from    ticket tk " + "        where   tk.tour_idtour = :idTour "
-			+ "                and tk.bus_idbus = :idBus " + "        )", nativeQuery = true)
+	@Query(value = "SELECT s.*, b.*, t.* " + 
+			"FROM seat s " + 
+			"INNER JOIN bus b " + 
+			"ON s.bus_idbus = b.idbus " + 
+			"INNER JOIN tour t " + 
+			"ON b.tour_idtour = t.idtour " + 
+			"WHERE t.idtour = :idTour " + 
+			"AND b.idbus = :idBus " + 
+			"AND s.idseat NOT IN " + 
+			"		(" + 
+			"        select  tk.seat_idseat " + 
+			"        from    ticket tk " + 
+			"        where   tk.tour_idtour = :idTour " + 
+			"                and tk.bus_idbus = :idBus " + 
+			"        )", nativeQuery= true)
 	List<Seat> findEmptySeatForTicket(@Param("idTour") int idTour, @Param("idBus") int idBus);
-
+	
 	/* ---------------- FIND SEAT BOOKED------------------------ */
-	@Query(value = "SELECT s.*, b.*, t.* " + "FROM seat s " + "INNER JOIN bus b " + "ON s.bus_idbus = b.idbus "
-			+ "INNER JOIN tour t " + "ON b.tour_idtour = t.idtour " + "WHERE t.idtour = :idTour "
-			+ "AND b.idbus = :idBus " + "AND s.idseat IN " + "		(" + "        select  tk.seat_idseat "
-			+ "        from    ticket tk " + "        where   tk.tour_idtour = :idTour "
-			+ "                and tk.bus_idbus = :idBus " + "        )", nativeQuery = true)
+	@Query(value = "SELECT s.*, b.*, t.* " + 
+			"FROM seat s " + 
+			"INNER JOIN bus b " + 
+			"ON s.bus_idbus = b.idbus " + 
+			"INNER JOIN tour t " + 
+			"ON b.tour_idtour = t.idtour " + 
+			"WHERE t.idtour = :idTour " + 
+			"AND b.idbus = :idBus " + 
+			"AND s.idseat IN " + 
+			"		(" + 
+			"        select  tk.seat_idseat " + 
+			"        from    ticket tk " + 
+			"        where   tk.tour_idtour = :idTour " + 
+			"                and tk.bus_idbus = :idBus " + 
+			"        )", nativeQuery= true)
 	List<Seat> findBookedSeatForTicket(@Param("idTour") int idTour, @Param("idBus") int idBus);
 }
+

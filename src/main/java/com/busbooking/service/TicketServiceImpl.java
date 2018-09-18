@@ -6,6 +6,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Service;
 
 import com.busbooking.entities.Ticket;
@@ -16,16 +17,28 @@ public class TicketServiceImpl implements TicketService {
 
 	@Autowired
 	private TicketRepository ticketRepository;
-
+	
 	/* ---------------- CREATE TICKET ------------------------ */
 	@Override
 	public Ticket save(Ticket ticket) {
 		return ticketRepository.save(ticket);
 	}
 	
+	/* ---------------- FIND TICKET BY USER ID ------------------------ */
 	@Override
 	public List<Ticket> findTicketByUserId(int userId) {
 		return ticketRepository.findTicketByUserId(userId);
+	}
+	
+	/* ---------------- FIND TOUR, BUS, SEAT ------------------------ */
+//	@Override
+//	public Optional<Ticket> findSeatForTicket(int idTour, int idBus, String numberSeat){
+//		return ticketRepository.findSeatForTicket(idTour, idBus, numberSeat);
+//	}
+	
+	@Override
+	public Page<Ticket> findStartplaceByTicket(String startPlace, Pageable pageable) {
+		return ticketRepository.findStartplaceByTicket(startPlace, pageable);
 	}
 
 	/* ---------------- FIND ALL TICKET ------------------------ */
@@ -44,12 +57,6 @@ public class TicketServiceImpl implements TicketService {
 	@Override
 	public Optional<Ticket> findOne(int id) {
 		return ticketRepository.findById(id);
-	}
-	
-	/* ---------------- FIND BOOKED SEATS ------------------------ */
-	@Override
-	public List<Ticket> findBookedSeat(int idTour,int idBus){
-		return ticketRepository.findBookedSeat(idTour, idBus);
 	}
 
 	/* ---------------- FIND SEAT DEPEND TICKET ------------------------ */
@@ -74,5 +81,5 @@ public class TicketServiceImpl implements TicketService {
 	public Optional<Ticket> setUser(int idUser){
 		return null;
 	}
-	
+
 }
